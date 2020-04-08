@@ -5,6 +5,8 @@ option(BUILD_PYTHON "Build Python Integration" ON)
 option(BUILD_SHARED "Build shared Trellis library" ON)
 option(STATIC_BUILD "Create static build of Trellis tools" OFF)
 
+set(BUILD_PREFIX "" CACHE STRING "Name prefix for executables")
+
 set(CMAKE_CXX_STANDARD 14)
 if (MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -bigobj -EHsc")
@@ -116,12 +118,12 @@ function(setup_rpath name)
     if(APPLE)
         set_target_properties(${name} PROPERTIES
                               BUILD_WITH_INSTALL_RPATH ON
-                              INSTALL_RPATH "@loader_path/${TRELLIS_RPATH_LIBDIR}/trellis"
+                              INSTALL_RPATH "@loader_path/${TRELLIS_RPATH_LIBDIR}/${BUILD_PREFIX}trellis"
                               INSTALL_NAME_DIR "@rpath")
     elseif(UNIX)
         set_target_properties(${name} PROPERTIES
                               BUILD_WITH_INSTALL_RPATH ON
-                              INSTALL_RPATH "\$ORIGIN/${TRELLIS_RPATH_LIBDIR}/trellis")
+                              INSTALL_RPATH "\$ORIGIN/${TRELLIS_RPATH_LIBDIR}/${BUILD_PREFIX}trellis")
     endif()
 endfunction()
 
@@ -144,45 +146,45 @@ if (NOT ("${LAST_GIT_VERSION}" STREQUAL "${CURRENT_GIT_VERSION}"))
 endif()
 file(WRITE "${CMAKE_BINARY_DIR}/generated/last_git_version" CURRENT_GIT_VERSION)
 
-add_executable(ecpbram ${INCLUDE_FILES} tools/ecpbram.cpp "${CMAKE_BINARY_DIR}/generated/version.cpp")
-target_include_directories(ecpbram PRIVATE tools)
-target_compile_definitions(ecpbram PRIVATE TRELLIS_RPATH_DATADIR="${TRELLIS_RPATH_DATADIR}" TRELLIS_PREFIX="${CMAKE_INSTALL_PREFIX}")
-target_link_libraries(ecpbram trellis ${Boost_LIBRARIES} ${CMAKE_DL_LIBS} ${link_param})
-setup_rpath(ecpbram)
+add_executable(${BUILD_PREFIX}ecpbram ${INCLUDE_FILES} tools/ecpbram.cpp "${CMAKE_BINARY_DIR}/generated/version.cpp")
+target_include_directories(${BUILD_PREFIX}ecpbram PRIVATE tools)
+target_compile_definitions(${BUILD_PREFIX}ecpbram PRIVATE TRELLIS_RPATH_DATADIR="${TRELLIS_RPATH_DATADIR}" TRELLIS_PREFIX="${CMAKE_INSTALL_PREFIX}" TRELLIS_BUILD_PREFIX="${BUILD_PREFIX}")
+target_link_libraries(${BUILD_PREFIX}ecpbram trellis ${Boost_LIBRARIES} ${CMAKE_DL_LIBS} ${link_param})
+setup_rpath(${BUILD_PREFIX}ecpbram)
 
-add_executable(ecppack ${INCLUDE_FILES} tools/ecppack.cpp "${CMAKE_BINARY_DIR}/generated/version.cpp")
-target_include_directories(ecppack PRIVATE tools)
-target_compile_definitions(ecppack PRIVATE TRELLIS_RPATH_DATADIR="${TRELLIS_RPATH_DATADIR}" TRELLIS_PREFIX="${CMAKE_INSTALL_PREFIX}")
-target_link_libraries(ecppack trellis ${Boost_LIBRARIES} ${CMAKE_DL_LIBS} ${link_param})
-setup_rpath(ecppack)
+add_executable(${BUILD_PREFIX}ecppack ${INCLUDE_FILES} tools/ecppack.cpp "${CMAKE_BINARY_DIR}/generated/version.cpp")
+target_include_directories(${BUILD_PREFIX}ecppack PRIVATE tools)
+target_compile_definitions(${BUILD_PREFIX}ecppack PRIVATE TRELLIS_RPATH_DATADIR="${TRELLIS_RPATH_DATADIR}" TRELLIS_PREFIX="${CMAKE_INSTALL_PREFIX}" TRELLIS_BUILD_PREFIX="${BUILD_PREFIX}")
+target_link_libraries(${BUILD_PREFIX}ecppack trellis ${Boost_LIBRARIES} ${CMAKE_DL_LIBS} ${link_param})
+setup_rpath(${BUILD_PREFIX}ecppack)
 
-add_executable(ecpunpack ${INCLUDE_FILES} tools/ecpunpack.cpp "${CMAKE_BINARY_DIR}/generated/version.cpp")
-target_include_directories(ecpunpack PRIVATE tools)
-target_compile_definitions(ecpunpack PRIVATE TRELLIS_RPATH_DATADIR="${TRELLIS_RPATH_DATADIR}" TRELLIS_PREFIX="${CMAKE_INSTALL_PREFIX}")
-target_link_libraries(ecpunpack trellis ${Boost_LIBRARIES} ${CMAKE_DL_LIBS} ${link_param})
-setup_rpath(ecpunpack)
+add_executable(${BUILD_PREFIX}ecpunpack ${INCLUDE_FILES} tools/ecpunpack.cpp "${CMAKE_BINARY_DIR}/generated/version.cpp")
+target_include_directories(${BUILD_PREFIX}ecpunpack PRIVATE tools)
+target_compile_definitions(${BUILD_PREFIX}ecpunpack PRIVATE TRELLIS_RPATH_DATADIR="${TRELLIS_RPATH_DATADIR}" TRELLIS_PREFIX="${CMAKE_INSTALL_PREFIX}" TRELLIS_BUILD_PREFIX="${BUILD_PREFIX}")
+target_link_libraries(${BUILD_PREFIX}ecpunpack trellis ${Boost_LIBRARIES} ${CMAKE_DL_LIBS} ${link_param})
+setup_rpath(${BUILD_PREFIX}ecpunpack)
 
-add_executable(ecppll ${INCLUDE_FILES} tools/ecppll.cpp "${CMAKE_BINARY_DIR}/generated/version.cpp")
-target_include_directories(ecppll PRIVATE tools)
-target_compile_definitions(ecppll PRIVATE TRELLIS_RPATH_DATADIR="${TRELLIS_RPATH_DATADIR}" TRELLIS_PREFIX="${CMAKE_INSTALL_PREFIX}")
-target_link_libraries(ecppll trellis ${Boost_LIBRARIES} ${CMAKE_DL_LIBS} ${link_param})
-setup_rpath(ecppll)
+add_executable(${BUILD_PREFIX}ecppll ${INCLUDE_FILES} tools/ecppll.cpp "${CMAKE_BINARY_DIR}/generated/version.cpp")
+target_include_directories(${BUILD_PREFIX}ecppll PRIVATE tools)
+target_compile_definitions(${BUILD_PREFIX}ecppll PRIVATE TRELLIS_RPATH_DATADIR="${TRELLIS_RPATH_DATADIR}" TRELLIS_PREFIX="${CMAKE_INSTALL_PREFIX}" TRELLIS_BUILD_PREFIX="${BUILD_PREFIX}")
+target_link_libraries(${BUILD_PREFIX}ecppll trellis ${Boost_LIBRARIES} ${CMAKE_DL_LIBS} ${link_param})
+setup_rpath(${BUILD_PREFIX}ecppll)
 
-add_executable(ecpmulti ${INCLUDE_FILES} tools/ecpmulti.cpp "${CMAKE_BINARY_DIR}/generated/version.cpp")
-target_include_directories(ecpmulti PRIVATE tools)
-target_compile_definitions(ecpmulti PRIVATE TRELLIS_RPATH_DATADIR="${TRELLIS_RPATH_DATADIR}" TRELLIS_PREFIX="${CMAKE_INSTALL_PREFIX}")
-target_link_libraries(ecpmulti trellis ${Boost_LIBRARIES} ${CMAKE_DL_LIBS} ${link_param})
-setup_rpath(ecpmulti)
+add_executable(${BUILD_PREFIX}ecpmulti ${INCLUDE_FILES} tools/ecpmulti.cpp "${CMAKE_BINARY_DIR}/generated/version.cpp")
+target_include_directories(${BUILD_PREFIX}ecpmulti PRIVATE tools)
+target_compile_definitions(${BUILD_PREFIX}ecpmulti PRIVATE TRELLIS_RPATH_DATADIR="${TRELLIS_RPATH_DATADIR}" TRELLIS_PREFIX="${CMAKE_INSTALL_PREFIX}" TRELLIS_BUILD_PREFIX="${BUILD_PREFIX}")
+target_link_libraries(${BUILD_PREFIX}ecpmulti trellis ${Boost_LIBRARIES} ${CMAKE_DL_LIBS} ${link_param})
+setup_rpath(${BUILD_PREFIX}ecpmulti)
 
 if (BUILD_SHARED)
-    install(TARGETS trellis ecpbram ecppack ecppll ecpunpack ecpmulti ${PythonInstallTarget}
-            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/trellis
+    install(TARGETS trellis ${BUILD_PREFIX}ecpbram ${BUILD_PREFIX}ecppack ${BUILD_PREFIX}ecppll ${BUILD_PREFIX}ecpunpack ${BUILD_PREFIX}ecpmulti ${PythonInstallTarget}
+            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/${BUILD_PREFIX}trellis
             RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 else()
-    install(TARGETS ecpbram ecppack ecpunpack ecppll ecpmulti
+    install(TARGETS ${BUILD_PREFIX}ecpbram ${BUILD_PREFIX}ecppack ${BUILD_PREFIX}ecpunpack ${BUILD_PREFIX}ecppll ${BUILD_PREFIX}ecpmulti
             RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 endif()
-install(DIRECTORY ../database DESTINATION ${CMAKE_INSTALL_DATADIR}/trellis PATTERN ".git" EXCLUDE)
-install(DIRECTORY ../misc DESTINATION ${CMAKE_INSTALL_DATADIR}/trellis)
-install(DIRECTORY ../util/common DESTINATION ${CMAKE_INSTALL_DATADIR}/trellis/util)
-install(DIRECTORY ../timing/util DESTINATION ${CMAKE_INSTALL_DATADIR}/trellis/timing USE_SOURCE_PERMISSIONS)
+install(DIRECTORY ../database DESTINATION ${CMAKE_INSTALL_DATADIR}/${BUILD_PREFIX}trellis PATTERN ".git" EXCLUDE)
+install(DIRECTORY ../misc DESTINATION ${CMAKE_INSTALL_DATADIR}/${BUILD_PREFIX}trellis)
+install(DIRECTORY ../util/common DESTINATION ${CMAKE_INSTALL_DATADIR}/${BUILD_PREFIX}trellis/util)
+install(DIRECTORY ../timing/util DESTINATION ${CMAKE_INSTALL_DATADIR}/${BUILD_PREFIX}trellis/timing USE_SOURCE_PERMISSIONS)
